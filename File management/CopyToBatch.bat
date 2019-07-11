@@ -21,7 +21,8 @@ EXIT /B
   COLOR 9F
   ECHO Copying and moving...
   echo.
-  COPY *.mkv G:\#Video
+  "C:/Program Files/Python37/python.exe" .\renameScript.py
+  COPY *.mkv G:\#Video\Seasonals
   MOVE *.mkv .\Watched
   ECHO Task 1 is done!
   PAUSE
@@ -30,6 +31,7 @@ EXIT /B
   COLOR CF
   ECHO Copying...
   echo.
+  "C:/Program Files/Python37/python.exe" .\renameScript.py
   COPY *.mkv G:\#Video
   ECHO Task 2 is done!
   GOTO END_CASE
