@@ -1,6 +1,6 @@
 import shutil, os, re
 
-namePattern = re.compile(r'(\[.+\]\s)([a-zA-Z0-9. -]+)(\s.+)(\.mkv|\.mp4)')
+namePattern = re.compile(r'(\[.+\]\s)([a-zA-Z0-9. -]+)(\s.+)(\.mkv|\.mp4)') # Compile regex.
 
 for filename in os.listdir('.'): # Loop over the files in the working directory.
     mo = namePattern.search(filename)
@@ -14,8 +14,8 @@ for filename in os.listdir('.'): # Loop over the files in the working directory.
     newFilename = title + extension # Form the new filename.
 
     absWorkingDir = os.path.abspath('.') # Get the full, absolute file paths.
+    print('Renaming: ' + filename + ' to: ' + newFilename)
+    
     filename = os.path.join(absWorkingDir, filename)
     newFilename = os.path.join(absWorkingDir, newFilename)
-
-    print('Renaming: ' + filename + ' to: ' + newFilename)
     shutil.move(filename, newFilename) # Rename the files.
