@@ -1,0 +1,2 @@
+python podcastRetriever.py
+pause
