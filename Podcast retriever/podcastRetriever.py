@@ -38,3 +38,5 @@ else:
 
 if (count != maxNumFiles): # If there is no more audio left to listen, start over from 0
     os.unlink('./pyStorage.txt')
+
+input('Press ENTER to exit...')

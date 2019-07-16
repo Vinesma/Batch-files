@@ -1,20 +1,23 @@
 import shutil, os, re, sys
 
-namePattern = re.compile(r'(\[.+\]\s)([a-zA-Z0-9. -]+)(\s.+)(\.mkv|\.mp4)') # Compile regex
-namePattern2 = re.compile(r'(\.mkv|\.mp4)') # Compile regex
 dstFolder = "G:\#Video\Seasonals\\" # Destination folder
 dstFolder2 = "G:\#Video\\" # Destination folder 2
-absWorkingDir = os.path.abspath('.') # Working dir
+
+namePattern = re.compile(r'(\[.+\]\s)([a-zA-Z0-9. -]+)(\s.+)(\.mkv|\.mp4)') # Compile regex
+namePattern2 = re.compile(r'(\.mkv|\.mp4)') # Compile regex
+absWorkingDir = os.path.abspath('.') # Get the absolute filepath for the working dir
 opt = 5 # Options
 
 def loopDir():
+    # Loop between all the files in the current dir
+    # Returns a List
     returnList = []
     for filename in os.listdir('.'):
         returnList.append(filename)
     return returnList
 
-
 def renameCopyMoveFunc():
+    # Renames, copies, then moves the file into a "Watched" folder
     if not(os.path.isdir('.\\Watched\\')):
         os.mkdir('.\\Watched\\')
     
@@ -39,8 +42,10 @@ def renameCopyMoveFunc():
         shutil.copy(newFilename, dstFolder) # To
         shutil.move(newFilename, '.\\Watched\\') # Move
     print('RENAME/COPY/MOVE SCRIPT FINISHED!')
+    input('Press ENTER to exit...')
 
-def renameCopyFunc():   
+def renameCopyFunc():
+    # Renames, then copies the files to dstFolder2
     fileList = loopDir()
     for filename in fileList:
         mo = namePattern.search(filename) # Search for the regex
@@ -61,8 +66,10 @@ def renameCopyFunc():
         shutil.move(filename, newFilename) # Rename
         shutil.copy(newFilename, dstFolder2) # To
     print('RENAME/COPY SCRIPT FINISHED!')
+    input('Press ENTER to exit...')
 
 def copyFunc():
+    # Copies the files to dstFolder2
     fileList = loopDir()
     for filename in fileList:
         mo = namePattern2.search(filename) # Search for .mkv/.mp4 files
@@ -76,6 +83,9 @@ def copyFunc():
         filename = os.path.join(absWorkingDir, filename) # From
         shutil.copy(filename, dstFolder2) # To
     print('COPY SCRIPT FINISHED!')
+    input('Press ENTER to exit...')
+
+# START
 
 while opt == 5: 
     print("Welcome! This is a script for moving my weeb shit to a flash drive:")
