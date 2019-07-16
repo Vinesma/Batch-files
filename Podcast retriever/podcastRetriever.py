@@ -2,40 +2,39 @@ import shutil, os, re
 
 namePattern = re.compile(r'#(\d*\.?\d+)') # Compile regex
 absWorkingDir = os.path.abspath('.') # Get the full, absolute file paths
+dstFolder = "G:\#Audio\\" # Files will be copied to here
 maxNumFiles = 8 # The maximum number of files to copy
 count = 0 # Counting var
 
 if os.path.isfile('./pyStorage.txt'): # Checks if storage exists
     storage = open('pyStorage.txt', 'r')
-    c = float(storage.read())
+    lastEp = float(storage.read())
     storage.close()
-else:
+else: # If storage doesn't exist, start over from 0. Re:Zero
     storage = open('pyStorage.txt', 'w')
-    c = 0
-    
+    lastEp = 0
+
 for filename in os.listdir('.'): # Loop over the files in the working directory
     mo = namePattern.search(filename)
 
     if mo == None: # Skip files that don't match the regex
         continue
 
-    epNumber = float(mo.group(1)) # Grabs the episode number
-    if (epNumber > c) and (count < maxNumFiles): # Grabs the latest episodes not listened to
-        print('Copying: '+ filename +'\nFrom: '+ absWorkingDir +'\nTo: G:\#Audio\\')
-        filename = os.path.join(absWorkingDir, filename)        
-        shutil.copyfile(filename, 'G:\\#Audio\\') # DOESN'T WORK
+    epNumber = float(mo.group(1)) # Grabs ep number, format: (#NN.NN)
+    if (epNumber > lastEp) and (count < maxNumFiles): # Grabs latest episodes not listened to and copies them to dst
+        print('Copying: '+ filename +'\nFrom: '+ absWorkingDir +'\nTo: '+ dstFolder)
+        print('+---------------------------------+')
+        filename = os.path.join(absWorkingDir, filename)
+        shutil.copy(filename, dstFolder)
         count += 1
 
-# if count != maxNumFiles: # If there is no more audio left to listen, start over from 0 WIP
-    # os.unlink(os.path('./pyStorage.txt'))
-
 if not(storage.closed): # If the storage wasn't found
-    storage.write(str(c + maxNumFiles))
+    storage.write(str(lastEp + maxNumFiles))
     storage.close()
 else:
     storage = open('pyStorage.txt', 'w')
-    storage.write(str(c + maxNumFiles))
+    storage.write(str(lastEp + maxNumFiles))
     storage.close()
 
-# print(maxNumFiles)
-# print(count)
+if (count != maxNumFiles): # If there is no more audio left to listen, start over from 0
+    os.unlink('./pyStorage.txt')
