@@ -2,7 +2,7 @@
 
 A random assortment of batch files that I use.
 
-## File Management (WIP)
+## File Rename (WIP)
 
 Used to copy/move episodes of anime to a flash drive. Also renames them using a python script if the file follows this format: 
 
