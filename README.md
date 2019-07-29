@@ -23,3 +23,11 @@ Works with any file that has the numbering pattern: #NN.NN where N = Number. As 
 For example: "Podcast #3 - Title" Should be named "Podcast #03 - Title"
 
 (Executables made with pyinstaller)
+
+## Post Typer
+
+Used to type a post I created and submit it on reddit.
+
+I created this because of social anxiety and to stop myself from typing posts and erasing them. Having the machine type the post and submit it removes myself from it and (hopefully) allows for me to better socialize on the internet.
+
+The script should work with any website that has a: #1 Box that you can type in, and #2 a button that you click to submit, just provide an image of them called 'respBox' and 'saveBtn' into the folder.
