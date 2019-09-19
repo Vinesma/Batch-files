@@ -1,9 +1,7 @@
 import shutil, os, re, sys
 
-dstFolder = os.path.join('G:', '#Video', 'Seasonals') # Destination folder
-dstFolder2 = os.path.join('G:', '#Video') # Destination folder 2
-dstFolder3 = os.path.join('/', 'media', 'vinesma', 'B2A6-5374', '#Video', 'Seasonals') # Destination folder 3
-dstFolder4 = os.path.join('/', 'media', 'vinesma', 'B2A6-5374', '#Video') # Destination folder 4
+dstFolder = os.path.join('/', 'media', 'vinesma', 'B2A6-5374', '#Video', 'Seasonals') # Destination folder
+dstFolder2 = os.path.join('/', 'media', 'vinesma', 'B2A6-5374', '#Video') # Destination folder 2
 
 namePattern = re.compile(r'(\[.+\]\s)([a-zA-Z0-9. -]+)(\s.+)(\.mkv|\.mp4)') # Compile regex
 namePattern2 = re.compile(r'(\.mkv|\.mp4)') # Compile regex
@@ -39,8 +37,8 @@ def renameCopyMoveFunc():
         newFilename = os.path.join(absWorkingDir, newFilename) # From
         print('Renaming: {}\nInto: {}'.format(filename, newFilename))
         shutil.move(filename, newFilename) # Rename
-        print('Copying into: {}'.format(dstFolder3))
-        shutil.copy(newFilename, dstFolder3) # To
+        print('Copying into: {}'.format(dstFolder))
+        shutil.copy(newFilename, dstFolder) # To
         print('And moving into Watched folder')
         shutil.move(newFilename, os.path.join('.', 'Watched')) # Move
         print('+---------------------------------------+')
@@ -48,7 +46,7 @@ def renameCopyMoveFunc():
     input('Press ENTER to exit...')
 
 def renameCopyFunc():
-    # Renames, then copies the files to dstFolder4
+    # Renames, then copies the files to dstFolder2
     fileList = loopDir()
     for filename in fileList:
         mo = namePattern.search(filename) # Search for the regex
@@ -65,14 +63,14 @@ def renameCopyFunc():
         newFilename = os.path.join(absWorkingDir, newFilename) # From
         print('Renaming: {}\nInto: {}'.format(filename, newFilename))
         shutil.move(filename, newFilename) # Rename
-        print('And copying into: {}'.format(dstFolder4))
-        shutil.copy(newFilename, dstFolder4) # To
+        print('And copying into: {}'.format(dstFolder2))
+        shutil.copy(newFilename, dstFolder2) # To
         print('+---------------------------------------+')
     print('RENAME/COPY SCRIPT FINISHED!')
     input('Press ENTER to exit...')
 
 def copyFunc():
-    # Copies the files to dstFolder4
+    # Copies the files to dstFolder2
     fileList = loopDir()
     for filename in fileList:
         mo = namePattern2.search(filename) # Search for .mkv/.mp4 files
@@ -81,8 +79,8 @@ def copyFunc():
             continue
 
         filename = os.path.join(absWorkingDir, filename) # From
-        print('Copying: {}\nTo: {}'.format(filename, dstFolder4))
-        shutil.copy(filename, dstFolder4) # To
+        print('Copying: {}\nTo: {}'.format(filename, dstFolder2))
+        shutil.copy(filename, dstFolder2) # To
         print('+---------------------------------------+')
     print('COPY SCRIPT FINISHED!')
     input('Press ENTER to exit...')

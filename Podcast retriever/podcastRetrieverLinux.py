@@ -2,7 +2,7 @@ import shutil, os, re
 
 namePattern = re.compile(r'#(\d*\.?\d+)') # Compile regex
 absWorkingDir = os.path.abspath('.') # Get the full, absolute file paths
-dstFolder = os.path.join('G:', '#Audio') # Files will be copied to here
+dstFolder = os.path.join('/', 'media', 'vinesma', 'B2A6-5374', '#Audio') # Files will be copied to here
 maxNumFiles = 8 # The maximum number of files to copy
 count = 0 # Counting var
 
