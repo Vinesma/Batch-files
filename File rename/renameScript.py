@@ -3,7 +3,7 @@ import shutil, os, re, sys
 dstFolder = os.path.join('G:', '#Video', 'Seasonals') # Destination folder
 dstFolder2 = os.path.join('G:', '#Video') # Destination folder 2
 
-namePattern = re.compile(r'(\[.+\]\s)([a-zA-Z0-9. -]+)(\s.+)(\.mkv|\.mp4)') # Compile regex
+namePattern = re.compile(r'(\[.+\]\s)([a-zA-Z0-9\'"@%+&()!. -]+)(\s.+)(\.mkv|\.mp4)') # Compile regex
 namePattern2 = re.compile(r'(\.mkv|\.mp4)') # Compile regex
 absWorkingDir = os.path.abspath('.') # Get the absolute filepath for the working dir
 opt = 5 # Options
