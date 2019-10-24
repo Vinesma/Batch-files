@@ -46,7 +46,7 @@ def renameCopyMoveFunc():
     input('Press ENTER to exit...')
 
 def renameCopyFunc():
-    # Renames, then copies the files to dstFolder2
+    # Renames the files
     fileList = loopDir()
     for filename in fileList:
         mo = namePattern.search(filename) # Search for the regex
@@ -63,10 +63,8 @@ def renameCopyFunc():
         newFilename = os.path.join(absWorkingDir, newFilename) # From
         print('Renaming: {}\nInto: {}'.format(filename, newFilename))
         shutil.move(filename, newFilename) # Rename
-        print('And copying into: {}'.format(dstFolder2))
-        shutil.copy(newFilename, dstFolder2) # To
         print('+---------------------------------------+')
-    print('RENAME/COPY SCRIPT FINISHED!')
+    print('RENAME SCRIPT FINISHED!')
     input('Press ENTER to exit...')
 
 def copyFunc():
@@ -90,8 +88,8 @@ def copyFunc():
 while opt == 5: 
     print("Welcome! This is a script for moving my weeb shit to a flash drive:")
     print("1. Rename files, copy to USB and then store them in a folder called 'Watched'")
-    print("2. Rename files and copy to USB")
-    print("3. Copy to USB")
+    print("2. Only rename files")
+    print("3. Only copy to USB")
     print("4. Exit")
 
     opt = sys.stdin.readline()
