@@ -42,8 +42,7 @@ def renameCopyMoveFunc():
         print('And moving into Watched folder')
         shutil.move(newFilename, os.path.join('.', 'Watched')) # Move
         print('+---------------------------------------+')
-    print('RENAME/COPY/MOVE SCRIPT FINISHED!')
-    input('Press ENTER to exit...')
+    print('RENAME/COPY/MOVE SCRIPT FINISHED!')    
 
 def renameCopyFunc():
     # Renames the files
@@ -64,8 +63,7 @@ def renameCopyFunc():
         print('Renaming: {}\nInto: {}'.format(filename, newFilename))
         shutil.move(filename, newFilename) # Rename
         print('+---------------------------------------+')
-    print('RENAME SCRIPT FINISHED!')
-    input('Press ENTER to exit...')
+    print('RENAME SCRIPT FINISHED!')    
 
 def copyFunc():
     # Copies the files to dstFolder2
@@ -80,8 +78,7 @@ def copyFunc():
         print('Copying: {}\nTo: {}'.format(filename, dstFolder2))
         shutil.copy(filename, dstFolder2) # To
         print('+---------------------------------------+')
-    print('COPY SCRIPT FINISHED!')
-    input('Press ENTER to exit...')
+    print('COPY SCRIPT FINISHED!')    
 
 # START
 
