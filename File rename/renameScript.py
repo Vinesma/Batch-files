@@ -1,12 +1,26 @@
-import shutil, os, re, sys
-
-dstFolder = os.path.join('G:', '#Video', 'Seasonals') # Destination folder
-dstFolder2 = os.path.join('G:', '#Video') # Destination folder 2
+import shutil, os, re, sys, json
 
 namePattern = re.compile(r'(\[.+\]\s)([a-zA-Z0-9\'"@%+&()!. -]+)(\s.+)(\.mkv|\.mp4)') # Compile regex
 namePattern2 = re.compile(r'(\.mkv|\.mp4)') # Compile regex
 absWorkingDir = os.path.abspath('.') # Get the absolute filepath for the working dir
-opt = 5 # Options
+opt = 6 # Options
+
+# Reading config files
+try:
+    if sys.platform == 'linux':
+        with open("configLinux.json", "r") as readFile:
+            dstFolder, dstFolder2 = json.load(readFile)
+    else:
+        with open("configWin.json", "r") as readFile:
+            dstFolder, dstFolder2 = json.load(readFile)
+except FileNotFoundError as err:
+    print("[config] configuration not found, creating templates now.")
+    template = ["<PATH to SEASONALS folder>", "<PATH to REGULAR EPS folder>"]
+    with open("configLinux.json", "w") as openFile:
+        json.dump(template, openFile)
+    with open("configWin.json", "w") as openFile:
+        json.dump(template, openFile)
+    opt = 5
 
 def loopDir():
     # Loop between all the files in the current dir
@@ -43,7 +57,8 @@ def renameCopyMoveFunc():
         shutil.move(newFilename, os.path.join('.', 'Watched')) # Move
         print('+---------------------------------------+')
     print('RENAME/COPY/MOVE SCRIPT FINISHED!')
-    input('Press ENTER to exit...')
+    if sys.platform != 'linux':
+        input('Press ENTER to exit...')
 
 def renameCopyFunc():
     # Renames, then copies the files to dstFolder2
@@ -67,7 +82,8 @@ def renameCopyFunc():
         shutil.copy(newFilename, dstFolder2) # To
         print('+---------------------------------------+')
     print('RENAME/COPY SCRIPT FINISHED!')
-    input('Press ENTER to exit...')
+    if sys.platform != 'linux':
+        input('Press ENTER to exit...')
 
 def copyFunc():
     # Copies the files to dstFolder2
@@ -83,23 +99,49 @@ def copyFunc():
         shutil.copy(filename, dstFolder2) # To
         print('+---------------------------------------+')
     print('COPY SCRIPT FINISHED!')
-    input('Press ENTER to exit...')
+    if sys.platform != 'linux':
+        input('Press ENTER to exit...')
+
+def renameFunc():
+    # Renames files into their own dir   
+    fileList = loopDir()
+    for filename in fileList:
+        mo = namePattern.search(filename) # Search for the regex
+
+        if mo == None: # Skip files that don't match the regex
+            continue
+
+        title = mo.group(2)
+        extension = mo.group(4) # Get the different parts of the filename
+
+        newFilename = title + extension # Form the new filename
+
+        filename = os.path.join(absWorkingDir, filename)
+        newFilename = os.path.join(absWorkingDir, newFilename) # From
+        print('Renaming: {}\nInto: {}'.format(filename, newFilename))
+        shutil.move(filename, newFilename) # Rename
+        print('+---------------------------------------+')
+    print('RENAME SCRIPT FINISHED!')
+    if sys.platform != 'linux':
+        input('Press ENTER to exit...')
 
 # START
 
-while opt == 5: 
+while opt == 6:
     print("Welcome! This is a script for moving my weeb shit to a flash drive:")
+    print("[config] Your OS has been identified as: {}".format(sys.platform))
     print("1. Rename files, copy to USB and then store them in a folder called 'Watched'")
     print("2. Rename files and copy to USB")
     print("3. Copy to USB")
-    print("4. Exit")
+    print("4. Rename only")
+    print("5. Exit")
 
     opt = sys.stdin.readline()
     try:
         opt = int(opt)
     except ValueError as e:
         print("Please provide only numerical values.")
-        opt = 5
+        opt = 6
 
     if opt == 1:
         renameCopyMoveFunc()
@@ -108,7 +150,9 @@ while opt == 5:
     elif opt == 3:
         copyFunc()
     elif opt == 4:
+        renameFunc()
+    elif opt == 5:
         print("Exiting script...")
     else:
         print("Unknown value...")
-        opt = 5
+        opt = 6

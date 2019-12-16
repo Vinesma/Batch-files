@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/bin/python3 "renameScriptLinux.py"
+/usr/bin/python3 "renameScript.py"
