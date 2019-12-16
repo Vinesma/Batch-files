@@ -61,7 +61,7 @@ def renameCopyMoveFunc():
         input('Press ENTER to exit...')
 
 def renameCopyFunc():
-    # Renames, then copies the files to dstFolder2
+    # Renames the files
     fileList = loopDir()
     for filename in fileList:
         mo = namePattern.search(filename) # Search for the regex
@@ -78,8 +78,6 @@ def renameCopyFunc():
         newFilename = os.path.join(absWorkingDir, newFilename) # From
         print('Renaming: {}\nInto: {}'.format(filename, newFilename))
         shutil.move(filename, newFilename) # Rename
-        print('And copying into: {}'.format(dstFolder2))
-        shutil.copy(newFilename, dstFolder2) # To
         print('+---------------------------------------+')
     print('RENAME/COPY SCRIPT FINISHED!')
     if sys.platform != 'linux':
