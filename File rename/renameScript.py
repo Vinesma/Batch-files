@@ -130,7 +130,7 @@ while opt == 6:
     print("[config] Your OS has been identified as: {}".format(sys.platform))
     print("1. Rename files, copy to USB and then store them in a folder called 'Watched'")
     print("2. Rename files and copy to USB")
-    print("3. Copy to USB")
+    print("3. Copy (.mp4/.mkv) files to USB")
     print("4. Rename only")
     print("5. Exit")
 
