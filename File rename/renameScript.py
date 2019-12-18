@@ -15,7 +15,8 @@ try:
             destinationFolder, destinationFolder2 = json.load(readFile)
     print("[config] Config files loaded!")
 except FileNotFoundError as err:
-    print("[config] configuration not found, creating templates now.")
+    print("[config] Configuration not found, creating templates now.")
+    print("[config] Open the program again once it's properly configured.")
     template = ["<PATH to SEASONALS folder>", "<PATH to REGULAR EPS folder>"]
     with open("configLinux.json", "w") as openFile:
         json.dump(template, openFile)
