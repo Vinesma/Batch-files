@@ -13,6 +13,7 @@ try:
     else:
         with open("configWin.json", "r") as readFile:
             destinationFolder, destinationFolder2 = json.load(readFile)
+    print("[config] Config files loaded!")
 except FileNotFoundError as err:
     print("[config] configuration not found, creating templates now.")
     template = ["<PATH to SEASONALS folder>", "<PATH to REGULAR EPS folder>"]
@@ -22,11 +23,64 @@ except FileNotFoundError as err:
         json.dump(template, openFile)
     chosenOption = 5
 
+def searchFilesViaRegex(regex):
+    validFilesArray = []
+
+    for fileName in filesInDir():
+        mo = regex.search(fileName)
+
+        if mo == None: # Skip files that don't match the regex
+            continue
+
+        validFilesArray.append(fileName)
+
+    return validFilesArray
+
+def filesInDir():
+    fileArray = []
+
+    for fileName in os.listdir('.'):
+        fileArray.append(fileName)
+        
+    return fileArray
+
+def destructureFileName(fileName, regex):
+    mo = regex.search(fileName)
+
+    fileTitle = mo.group(2)
+    fileExtension = mo.group(4)
+    newFileName = fileTitle + fileExtension
+
+    return newFileName
+
+def renameInto(fileName, newFileName):
+    print('Renaming: {}\nInto: {}'.format(fileName, newFileName))
+    shutil.move(fileName, newFileName) # Rename into
+
+def copyTo(fileName, destination):
+    print('Copying into: {}'.format(destinationFolder2))
+    shutil.copy(fileName, destinationFolder2) # Copy to
+
+def checkIfWatchedFolderExists():
+    if not(os.path.isdir(os.path.join('.', 'Watched'))):
+        os.mkdir(os.path.join('.', 'Watched'))
+
+def moveIntoWatchedFolder(fileName):
+    print('Moving into Watched folder:')
+    shutil.move(fileName, os.path.join('.', 'Watched'))
+
+def inputIfLinux():
+    if sys.platform != 'linux':
+        input('Press ENTER to exit...')
+
+def appendToWorkingDir(fileName):
+    return os.path.join(absWorkingDir, fileName)
+
 # START
 
 while chosenOption == 6:
+    print("[config] OS: {}".format(sys.platform))
     print("Welcome! This is a script for moving my weeb shit to a flash drive:")
-    print("[config] Your OS has been identified as: {}".format(sys.platform))
     print("1. Rename files, copy to USB and then store them in a folder called 'Watched'")
     print("2. Rename files and copy to USB")
     print("3. Copy (.mp4/.mkv) files to USB")
@@ -95,56 +149,3 @@ while chosenOption == 6:
     else:
         print("Unknown value...")
         chosenOption = 6
-
-def searchFilesViaRegex(regex):
-    validFilesArray = []
-
-    for fileName in filesInDir():
-        mo = regex.search(fileName)
-
-        if mo == None: # Skip files that don't match the regex
-            continue
-
-        validFilesArray.append(fileName)
-
-    return validFilesArray
-
-def filesInDir():
-    fileArray = []
-
-    for fileName in os.listdir('.'):
-        fileArray.append(fileName)
-        
-    return fileArray
-
-def destructureFileName(fileName, regex):
-    mo = regex.search(fileName)
-
-    fileTitle = mo.group(2)
-    fileExtension = mo.group(4)
-    newFileName = fileTitle + fileExtension
-
-    return newFileName
-
-def renameInto(fileName, newFileName):
-    print('Renaming: {}\nInto: {}'.format(fileName, newFileName))
-    shutil.move(fileName, newFileName) # Rename into
-
-def copyTo(fileName, destination):
-    print('Copying into: {}'.format(destinationFolder2))
-    shutil.copy(fileName, destinationFolder2) # Copy to
-
-def checkIfWatchedFolderExists():
-    if not(os.path.isdir(os.path.join('.', 'Watched'))):
-        os.mkdir(os.path.join('.', 'Watched'))
-
-def moveIntoWatchedFolder(fileName):
-    print('Moving into Watched folder:')
-    shutil.move(fileName, os.path.join('.', 'Watched'))
-
-def inputIfLinux():
-    if sys.platform != 'linux':
-        input('Press ENTER to exit...')
-
-def appendToWorkingDir(fileName):
-    return os.path.join(absWorkingDir, fileName)
