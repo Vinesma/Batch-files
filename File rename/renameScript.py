@@ -22,110 +22,6 @@ except FileNotFoundError as err:
         json.dump(template, openFile)
     chosenOption = 5
 
-# Renames, copies, then moves the file into a "./Watched/"
-def renameCopyMove():
-    # Checks if "./Watched/" exists, if not it is created
-    if not(os.path.isdir(os.path.join('.', 'Watched'))):
-        os.mkdir(os.path.join('.', 'Watched'))
-    
-    fileList = loopFilesInDir()
-    for fileName in fileList:
-        mo = mainRegex.search(fileName)
-
-        if mo == None: # Skip files that don't match the regex
-            continue
-
-        fileTitle = mo.group(2)
-        fileExtension = mo.group(4)
-        newFileName = fileTitle + fileExtension
-
-        fileName = os.path.join(absWorkingDir, fileName)
-        newFileName = os.path.join(absWorkingDir, newFileName)
-        print('Renaming: {}\nInto: {}'.format(fileName, newFileName))
-        shutil.move(fileName, newFileName) # Rename
-        print('Copying into: {}'.format(destinationFolder))
-        shutil.copy(newFileName, destinationFolder) # Copy
-        print('And moving into Watched folder')
-        shutil.move(newFileName, os.path.join('.', 'Watched')) # Move
-        print('+---------------------------------------+')
-
-    print('RENAME/COPY/MOVE SCRIPT FINISHED!')
-    if sys.platform != 'linux':
-        input('Press ENTER to exit...')
-
-# Renames the files, then copies them to a folder
-def renameCopy():
-    fileList = loopFilesInDir()
-    for fileName in fileList:
-        mo = mainRegex.search(fileName)
-
-        if mo == None: # Skip files that don't match the regex
-            continue
-
-        fileTitle = mo.group(2)
-        fileExtension = mo.group(4)
-        newFileName = fileTitle + fileExtension
-
-        fileName = os.path.join(absWorkingDir, fileName)
-        newFileName = os.path.join(absWorkingDir, newFileName) # From
-
-        print('Renaming: {}\nInto: {}'.format(fileName, newFileName))
-        shutil.move(fileName, newFileName) # Rename
-        print('Copying into: {}'.format(destinationFolder2))
-        shutil.copy(newFileName, destinationFolder2) # Copy
-        print('+---------------------------------------+')
-
-    print('RENAME/COPY SCRIPT FINISHED!')
-    if sys.platform != 'linux':
-        input('Press ENTER to exit...')
-
-def copy():
-    # Copies the files to destinationFolder2
-    fileList = loopFilesInDir()
-    for fileName in fileList:
-        mo = videoFileRegex.search(fileName) # Search for .mkv/.mp4 files
-
-        if mo == None: # Skip files that don't match the regex
-            continue
-
-        fileName = os.path.join(absWorkingDir, fileName) # From
-        print('Copying: {}\nTo: {}'.format(fileName, destinationFolder2))
-        shutil.copy(fileName, destinationFolder2) # Copy
-        print('+---------------------------------------+')
-
-    print('COPY SCRIPT FINISHED!')
-    if sys.platform != 'linux':
-        input('Press ENTER to exit...')
-
-def rename():
-    # Renames files into their own dir   
-    fileList = loopFilesInDir()
-    for fileName in fileList:
-        mo = mainRegex.search(fileName)
-
-        if mo == None: # Skip files that don't match the regex
-            continue
-
-        fileTitle = mo.group(2)
-        fileExtension = mo.group(4)
-        newFileName = fileTitle + fileExtension
-
-        fileName = os.path.join(absWorkingDir, fileName)
-        newFileName = os.path.join(absWorkingDir, newFileName) # From
-        print('Renaming: {}\nInto: {}'.format(fileName, newFileName))
-        shutil.move(fileName, newFileName) # Rename
-        print('+---------------------------------------+')
-
-    print('RENAME SCRIPT FINISHED!')
-    if sys.platform != 'linux':
-        input('Press ENTER to exit...')
-
-def loopFilesInDir():
-    returnList = []
-    for fileName in os.listdir('.'):
-        returnList.append(fileName)
-    return returnList
-
 # START
 
 while chosenOption == 6:
@@ -145,15 +41,110 @@ while chosenOption == 6:
         chosenOption = 6
 
     if chosenOption == 1:
-        renameCopyMove()
+        checkIfWatchedFolderExists()
+
+        for fileName in searchFilesViaRegex(mainRegex):
+            newFileName = destructureFileName(fileName, mainRegex)
+
+            fileName = appendToWorkingDir(fileName)
+            newFileName = appendToWorkingDir(newFileName)
+            
+            renameInto(fileName, newFileName)
+            copyTo(fileName, destinationFolder)
+            moveIntoWatchedFolder(newFileName)
+
+        print('RENAME/COPY/MOVE SCRIPT FINISHED!')
+
+        inputIfLinux()
     elif chosenOption == 2:
-        renameCopy()
+        for fileName in searchFilesViaRegex(mainRegex):
+            newFileName = destructureFileName(fileName, mainRegex)
+
+            fileName = appendToWorkingDir(fileName)
+            newFileName = appendToWorkingDir(newFileName)
+
+            renameInto(fileName, newFileName)
+            copyTo(fileName, destinationFolder2)
+
+        print('RENAME/COPY SCRIPT FINISHED!')
+
+        inputIfLinux()
     elif chosenOption == 3:
-        copy()
+        for fileName in searchFilesViaRegex(videoFileRegex):
+            fileName = appendToWorkingDir(fileName)
+
+            copyTo(fileName, destinationFolder2)
+        
+        print('COPY SCRIPT FINISHED!')
+
+        inputIfLinux()
     elif chosenOption == 4:
-        rename()
+        for fileName in searchFilesViaRegex(mainRegex):
+            newFileName = destructureFileName(fileName, mainRegex)
+            
+            fileName = appendToWorkingDir(fileName)
+            newFileName = appendToWorkingDir(newFileName)
+
+            renameInto(fileName, newFileName)
+        
+        print('RENAME SCRIPT FINISHED!')
+
+        inputIfLinux()
     elif chosenOption == 5:
         print("Exiting script...")
     else:
         print("Unknown value...")
         chosenOption = 6
+
+def searchFilesViaRegex(regex):
+    validFilesArray = []
+
+    for fileName in filesInDir():
+        mo = regex.search(fileName)
+
+        if mo == None: # Skip files that don't match the regex
+            continue
+
+        validFilesArray.append(fileName)
+
+    return validFilesArray
+
+def filesInDir():
+    fileArray = []
+
+    for fileName in os.listdir('.'):
+        fileArray.append(fileName)
+        
+    return fileArray
+
+def destructureFileName(fileName, regex):
+    mo = regex.search(fileName)
+
+    fileTitle = mo.group(2)
+    fileExtension = mo.group(4)
+    newFileName = fileTitle + fileExtension
+
+    return newFileName
+
+def renameInto(fileName, newFileName):
+    print('Renaming: {}\nInto: {}'.format(fileName, newFileName))
+    shutil.move(fileName, newFileName) # Rename into
+
+def copyTo(fileName, destination):
+    print('Copying into: {}'.format(destinationFolder2))
+    shutil.copy(fileName, destinationFolder2) # Copy to
+
+def checkIfWatchedFolderExists():
+    if not(os.path.isdir(os.path.join('.', 'Watched'))):
+        os.mkdir(os.path.join('.', 'Watched'))
+
+def moveIntoWatchedFolder(fileName):
+    print('Moving into Watched folder:')
+    shutil.move(fileName, os.path.join('.', 'Watched'))
+
+def inputIfLinux():
+    if sys.platform != 'linux':
+        input('Press ENTER to exit...')
+
+def appendToWorkingDir(fileName):
+    return os.path.join(absWorkingDir, fileName)
