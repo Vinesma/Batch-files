@@ -112,6 +112,7 @@ while True:
         print('RENAME/COPY/MOVE SCRIPT FINISHED!')
 
         inputIfLinux()
+        sys.exit()
     elif chosenOption == 2:
         for fileName in searchFilesViaRegex(mainRegex):
             newFileName = destructureFileName(fileName, mainRegex)
@@ -125,6 +126,7 @@ while True:
         print('RENAME/COPY SCRIPT FINISHED!')
 
         inputIfLinux()
+        sys.exit()
     elif chosenOption == 3:
         for fileName in searchFilesViaRegex(videoFileRegex):
             fileName = appendToWorkingDir(fileName)
@@ -134,6 +136,7 @@ while True:
         print('COPY SCRIPT FINISHED!')
 
         inputIfLinux()
+        sys.exit()
     elif chosenOption == 4:
         for fileName in searchFilesViaRegex(mainRegex):
             newFileName = destructureFileName(fileName, mainRegex)
@@ -146,6 +149,7 @@ while True:
         print('RENAME SCRIPT FINISHED!')
 
         inputIfLinux()
+        sys.exit()
     elif chosenOption == 5:
         count = 1
         for fileName in searchFilesViaRegex(videoFileRegex):
