@@ -3,7 +3,7 @@ import shutil, os, re, sys, json
 mainRegex = re.compile(r'(\[.+\]\s)([a-zA-Z0-9\'"@%+&()!. -]+)(\s.+)(\.mkv|\.mp4)')
 videoFileRegex = re.compile(r'(\.mkv|\.mp4)')
 absWorkingDir = os.path.abspath('.') # Get the absolute filepath for the working dir
-chosenOption = 6
+chosenOption = 0
 
 # Reading config files
 try:
@@ -22,7 +22,7 @@ except FileNotFoundError as err:
         json.dump(template, openFile)
     with open("configWin.json", "w") as openFile:
         json.dump(template, openFile)
-    chosenOption = 5
+    sys.exit()
 
 def searchFilesViaRegex(regex):
     validFilesArray = []
@@ -55,20 +55,20 @@ def destructureFileName(fileName, regex):
     return newFileName
 
 def renameInto(fileName, newFileName):
-    print('Renaming: {}\nInto: {}'.format(fileName, newFileName))
+    print('Renaming: [{}]\nInto: [{}]'.format(fileName, newFileName))
     shutil.move(fileName, newFileName) # Rename into
 
 def copyTo(fileName, destination):
-    print('Copying into: {}'.format(destinationFolder2))
+    print('Copying [{}] to: [{}]'.format(fileName, destinationFolder2))
     shutil.copy(fileName, destinationFolder2) # Copy to
+
+def moveIntoWatchedFolder(fileName):
+    print('Moving {} into Watched folder:'.format(fileName))
+    shutil.move(fileName, os.path.join('.', 'Watched'))
 
 def checkIfWatchedFolderExists():
     if not(os.path.isdir(os.path.join('.', 'Watched'))):
         os.mkdir(os.path.join('.', 'Watched'))
-
-def moveIntoWatchedFolder(fileName):
-    print('Moving into Watched folder:')
-    shutil.move(fileName, os.path.join('.', 'Watched'))
 
 def inputIfLinux():
     if sys.platform != 'linux':
@@ -79,21 +79,22 @@ def appendToWorkingDir(fileName):
 
 # START
 
-while chosenOption == 6:
+while True:
     print("[config] OS: {}".format(sys.platform))
     print("Welcome! This is a script for moving my weeb shit to a flash drive:")
     print("1. Rename files, copy to USB and then store them in a folder called 'Watched'")
     print("2. Rename files and copy to USB")
     print("3. Copy (.mp4/.mkv) files to USB")
     print("4. Rename only")
-    print("5. Exit")
+    print("5. List (.mp4/.mkv) files in folder")
+    print("6. Exit")
 
     chosenOption = sys.stdin.readline()
     try:
         chosenOption = int(chosenOption)
     except ValueError as e:
         print("Please provide only numerical values.")
-        chosenOption = 6
+        chosenOption = 0
 
     if chosenOption == 1:
         checkIfWatchedFolderExists()
@@ -146,7 +147,12 @@ while chosenOption == 6:
 
         inputIfLinux()
     elif chosenOption == 5:
+        count = 1
+        for fileName in searchFilesViaRegex(videoFileRegex):
+            print('{} : {}'.format(count, fileName))
+            count += 1
+    elif chosenOption == 6:
         print("Exiting script...")
+        sys.exit()
     else:
         print("Unknown value...")
-        chosenOption = 6
