@@ -1,6 +1,6 @@
 import shutil, os, re, sys, json
 
-mainRegex = re.compile(r'(\[.+\]\s)([a-zA-Z0-9\'"@%+&()!. -]+)(\s.+)(\.mkv|\.mp4)')
+mainRegex = re.compile(r'([a-zA-Z0-9\'"@%+&()!. ]+-[0-9 ]+).*(\.mkv|\.mp4)')
 videoFileRegex = re.compile(r'(\.mkv|\.mp4)')
 absWorkingDir = os.path.abspath('.') # Get the absolute filepath for the working dir
 chosenOption = 0
@@ -48,8 +48,8 @@ def filesInDir():
 def destructureFileName(fileName, regex):
     mo = regex.search(fileName)
 
-    fileTitle = mo.group(2)
-    fileExtension = mo.group(4)
+    fileTitle = mo.group(1)
+    fileExtension = mo.group(2)
     newFileName = fileTitle + fileExtension
 
     return newFileName
