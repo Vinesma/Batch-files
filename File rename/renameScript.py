@@ -55,15 +55,15 @@ def destructureFileName(fileName, regex):
     return newFileName
 
 def renameInto(fileName, newFileName):
-    print('Renaming: [{}]\nInto: [{}]'.format(fileName, newFileName))
+    print('Renaming: [ {} ]\nInto: [ {} ]'.format(fileName, newFileName))
     shutil.move(fileName, newFileName) # Rename into
 
 def copyTo(fileName, destination):
-    print('Copying [{}] to: [{}]'.format(fileName, destinationFolder2))
+    print('Copying [ {} ] to: [ {} ]'.format(fileName, destinationFolder2))
     shutil.copy(fileName, destinationFolder2) # Copy to
 
 def moveIntoWatchedFolder(fileName):
-    print('Moving {} into Watched folder:'.format(fileName))
+    print('Moving [ {} ] into Watched folder'.format(fileName))
     shutil.move(fileName, os.path.join('.', 'Watched'))
 
 def checkIfWatchedFolderExists():
