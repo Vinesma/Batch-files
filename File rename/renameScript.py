@@ -106,7 +106,7 @@ while True:
             newFileName = appendToWorkingDir(newFileName)
             
             renameInto(fileName, newFileName)
-            copyTo(fileName, destinationFolder)
+            copyTo(newFileName, destinationFolder)
             moveIntoWatchedFolder(newFileName)
 
         print('RENAME/COPY/MOVE SCRIPT FINISHED!')
@@ -121,7 +121,7 @@ while True:
             newFileName = appendToWorkingDir(newFileName)
 
             renameInto(fileName, newFileName)
-            copyTo(fileName, destinationFolder2)
+            copyTo(newFileName, destinationFolder2)
 
         print('RENAME/COPY SCRIPT FINISHED!')
 
