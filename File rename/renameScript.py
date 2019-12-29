@@ -1,6 +1,6 @@
 import shutil, os, re, sys, json
 
-mainRegex = re.compile(r'([a-zA-Z0-9\'"@%+&()!. ]+-[0-9 ]+).*(\.mkv|\.mp4)')
+mainRegex = re.compile(r' ?([a-zA-Z0-9\'"@%+&()!. ]+-[0-9 ]+).*(\.mkv|\.mp4)')
 videoFileRegex = re.compile(r'(\.mkv|\.mp4)')
 absWorkingDir = os.path.abspath('.') # Get the absolute filepath for the working dir
 chosenOption = 0
@@ -59,8 +59,8 @@ def renameInto(fileName, newFileName):
     shutil.move(fileName, newFileName) # Rename into
 
 def copyTo(fileName, destination):
-    print('Copying [ {} ] to: [ {} ]'.format(fileName, destinationFolder2))
-    shutil.copy(fileName, destinationFolder2) # Copy to
+    print('Copying [ {} ] to: [ {} ]'.format(fileName, destination))
+    shutil.copy(fileName, destination) # Copy to
 
 def moveIntoWatchedFolder(fileName):
     print('Moving [ {} ] into Watched folder'.format(fileName))
