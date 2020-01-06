@@ -1,6 +1,6 @@
 import shutil, os, re, sys, json
 
-mainRegex = re.compile(r' ?([a-zA-Z0-9\'"@%+&()!. ]+-[0-9 ]+).*(\.mkv|\.mp4)')
+mainRegex = re.compile(r' ?([a-zA-Z0-9\'"@%+&()!.\s-]+-\s[0-9]+).*(\.mkv|\.mp4)')
 videoFileRegex = re.compile(r'(\.mkv|\.mp4)')
 absWorkingDir = os.path.abspath('.') # Get the absolute filepath for the working dir
 chosenOption = 0
@@ -55,15 +55,15 @@ def destructureFileName(fileName, regex):
     return newFileName
 
 def renameInto(fileName, newFileName):
-    print('Renaming: [ {} ]\nInto: [ {} ]'.format(fileName, newFileName))
+    print('\nRenaming: [ {} ]\nInto: [ {} ]'.format(fileName, newFileName))
     shutil.move(fileName, newFileName) # Rename into
 
 def copyTo(fileName, destination):
-    print('Copying [ {} ] to: [ {} ]'.format(fileName, destination))
+    print('\nCopying [ {} ] to: [ {} ]'.format(fileName, destination))
     shutil.copy(fileName, destination) # Copy to
 
 def moveIntoWatchedFolder(fileName):
-    print('Moving [ {} ] into Watched folder'.format(fileName))
+    print('\nMoving [ {} ] into Watched folder'.format(fileName))
     shutil.move(fileName, os.path.join('.', 'Watched'))
 
 def checkIfWatchedFolderExists():
@@ -72,7 +72,7 @@ def checkIfWatchedFolderExists():
 
 def inputIfLinux():
     if sys.platform != 'linux':
-        input('Press ENTER to exit...')
+        input('\nPress ENTER to exit...')
 
 def appendToWorkingDir(fileName):
     return os.path.join(absWorkingDir, fileName)
@@ -93,7 +93,7 @@ while True:
     try:
         chosenOption = int(chosenOption)
     except ValueError as e:
-        print("Please provide only numerical values.")
+        print("\nPlease provide only numerical values.")
         chosenOption = 0
 
     if chosenOption == 1:
@@ -109,7 +109,7 @@ while True:
             copyTo(newFileName, destinationFolder)
             moveIntoWatchedFolder(newFileName)
 
-        print('RENAME/COPY/MOVE SCRIPT FINISHED!')
+        print('\nRENAME/COPY/MOVE SCRIPT FINISHED!')
 
         inputIfLinux()
         sys.exit()
@@ -123,7 +123,7 @@ while True:
             renameInto(fileName, newFileName)
             copyTo(newFileName, destinationFolder2)
 
-        print('RENAME/COPY SCRIPT FINISHED!')
+        print('\nRENAME/COPY SCRIPT FINISHED!')
 
         inputIfLinux()
         sys.exit()
@@ -133,7 +133,7 @@ while True:
 
             copyTo(fileName, destinationFolder2)
         
-        print('COPY SCRIPT FINISHED!')
+        print('\nCOPY SCRIPT FINISHED!')
 
         inputIfLinux()
         sys.exit()
@@ -146,7 +146,7 @@ while True:
 
             renameInto(fileName, newFileName)
         
-        print('RENAME SCRIPT FINISHED!')
+        print('\nRENAME SCRIPT FINISHED!')
 
         inputIfLinux()
         sys.exit()
@@ -156,7 +156,7 @@ while True:
             print('{} : {}'.format(count, fileName))
             count += 1
     elif chosenOption == 6:
-        print("Exiting script...")
+        print("\nExiting script...")
         sys.exit()
     else:
-        print("Unknown value...")
+        print("\nUnknown value...")
