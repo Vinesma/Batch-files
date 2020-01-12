@@ -1,8 +1,20 @@
 import shutil, os, re, sys, json
 
+# Regex
 mainRegex = re.compile(r' ?([a-zA-Z0-9\'"@%+&()!.\s-]+-\s[0-9]+).*(\.mkv|\.mp4)')
 videoFileRegex = re.compile(r'(\.mkv|\.mp4)')
+
+# File Paths
+tempFolder = 'temp'
+watchedFolder = 'Watched'
 absWorkingDir = os.path.abspath('.') # Get the absolute filepath for the working dir
+
+tempFolderPath = os.path.join('.', tempFolder)
+tempFolderWorkingDir = os.path.join(absWorkingDir, tempFolder)
+
+watchedFolderPath = os.path.join('.', watchedFolder)
+watchedFolderWorkingDir = os.path.join(absWorkingDir, watchedFolder)
+
 chosenOption = 0
 
 # Reading config files
@@ -24,12 +36,13 @@ except FileNotFoundError as err:
         json.dump(template, openFile)
     sys.exit()
 
-def searchFilesViaRegex(regex):
+# Functions
+def searchFilesViaRegex(regex, directory):
     validFilesArray = []
 
-    for fileName in filesInDir():
+    for fileName in allFilesIn(directory):
         mo = regex.search(fileName)
-
+        
         if mo == None: # Skip files that don't match the regex
             continue
 
@@ -37,10 +50,10 @@ def searchFilesViaRegex(regex):
 
     return validFilesArray
 
-def filesInDir():
+def allFilesIn(directory):
     fileArray = []
 
-    for fileName in os.listdir('.'):
+    for fileName in os.listdir(directory):
         fileArray.append(fileName)
         
     return fileArray
@@ -54,28 +67,46 @@ def destructureFileName(fileName, regex):
 
     return newFileName
 
-def renameInto(fileName, newFileName):
-    print('\nRenaming: [ {} ]\nInto: [ {} ]'.format(fileName, newFileName))
+def copyToTempFolder():
+    createTempFolder()
+
+    print('Copying files...')
+    for filename in searchFilesViaRegex(videoFileRegex, absWorkingDir):
+        copyTo(filename, tempFolderPath, False)
+    print('Performing operations...')
+
+def createTempFolder():
+    print('Creating temporary folder...')
+    os.mkdir(tempFolderPath)
+
+def removeTempFolder():
+    print('Cleaning up...')
+    shutil.rmtree(tempFolderPath)
+
+def renameInto(fileName, newFileName, log):
+    if log:
+        print('\nRenaming: [ {} ]\nInto: [ {} ]'.format(fileName, newFileName))
     shutil.move(fileName, newFileName) # Rename into
 
-def copyTo(fileName, destination):
-    print('\nCopying [ {} ] to: [ {} ]'.format(fileName, destination))
+def copyTo(fileName, destination, log):
+    if log:
+        print('\nCopying [ {} ]\nto: [ {} ]'.format(fileName, destination))
     shutil.copy(fileName, destination) # Copy to
 
 def moveIntoWatchedFolder(fileName):
     print('\nMoving [ {} ] into Watched folder'.format(fileName))
-    shutil.move(fileName, os.path.join('.', 'Watched'))
+    shutil.move(fileName, watchedFolderWorkingDir)
 
 def checkIfWatchedFolderExists():
-    if not(os.path.isdir(os.path.join('.', 'Watched'))):
-        os.mkdir(os.path.join('.', 'Watched'))
+    if not(os.path.isdir(watchedFolderPath)):
+        os.mkdir(watchedFolderPath)
 
 def inputIfLinux():
     if sys.platform != 'linux':
         input('\nPress ENTER to exit...')
 
 def appendToWorkingDir(fileName):
-    return os.path.join(absWorkingDir, fileName)
+    return os.path.join(tempFolderWorkingDir, fileName)
 
 # START
 
@@ -98,63 +129,74 @@ while True:
 
     if chosenOption == 1:
         checkIfWatchedFolderExists()
+        copyToTempFolder()
 
-        for fileName in searchFilesViaRegex(mainRegex):
+        for fileName in searchFilesViaRegex(mainRegex, tempFolderWorkingDir):
             newFileName = destructureFileName(fileName, mainRegex)
 
             fileName = appendToWorkingDir(fileName)
             newFileName = appendToWorkingDir(newFileName)
             
-            renameInto(fileName, newFileName)
-            copyTo(newFileName, destinationFolder)
+            renameInto(fileName, newFileName, True)
+            copyTo(newFileName, destinationFolder, True)
             moveIntoWatchedFolder(newFileName)
+            print('+----------------------------+')
 
         print('\nRENAME/COPY/MOVE SCRIPT FINISHED!')
 
+        removeTempFolder()
         inputIfLinux()
         sys.exit()
     elif chosenOption == 2:
-        for fileName in searchFilesViaRegex(mainRegex):
+        copyToTempFolder()
+        for fileName in searchFilesViaRegex(mainRegex, tempFolderWorkingDir):
             newFileName = destructureFileName(fileName, mainRegex)
 
             fileName = appendToWorkingDir(fileName)
             newFileName = appendToWorkingDir(newFileName)
 
-            renameInto(fileName, newFileName)
-            copyTo(newFileName, destinationFolder2)
+            renameInto(fileName, newFileName, True)
+            copyTo(newFileName, destinationFolder2, True)
+            print('+----------------------------+')
 
         print('\nRENAME/COPY SCRIPT FINISHED!')
 
+        removeTempFolder()
         inputIfLinux()
         sys.exit()
     elif chosenOption == 3:
-        for fileName in searchFilesViaRegex(videoFileRegex):
+        for fileName in searchFilesViaRegex(videoFileRegex, absWorkingDir):
             fileName = appendToWorkingDir(fileName)
 
-            copyTo(fileName, destinationFolder2)
+            copyTo(fileName, destinationFolder2, True)
+            print('+----------------------------+')
         
         print('\nCOPY SCRIPT FINISHED!')
 
         inputIfLinux()
         sys.exit()
     elif chosenOption == 4:
-        for fileName in searchFilesViaRegex(mainRegex):
+        copyToTempFolder()
+        for fileName in searchFilesViaRegex(mainRegex, tempFolderWorkingDir):
             newFileName = destructureFileName(fileName, mainRegex)
             
             fileName = appendToWorkingDir(fileName)
             newFileName = appendToWorkingDir(newFileName)
 
-            renameInto(fileName, newFileName)
+            renameInto(fileName, newFileName, True)
+            print('+----------------------------+')
         
         print('\nRENAME SCRIPT FINISHED!')
 
+        removeTempFolder()
         inputIfLinux()
         sys.exit()
     elif chosenOption == 5:
         count = 1
-        for fileName in searchFilesViaRegex(videoFileRegex):
-            print('{} : {}'.format(count, fileName))
+        for fileName in searchFilesViaRegex(videoFileRegex, absWorkingDir):
+            print('\n{} : {}'.format(count, fileName))
             count += 1
+        print('\n')
     elif chosenOption == 6:
         print("\nExiting script...")
         sys.exit()
