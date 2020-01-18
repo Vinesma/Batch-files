@@ -108,6 +108,9 @@ def inputIfLinux():
 def appendToWorkingDir(fileName):
     return os.path.join(tempFolderWorkingDir, fileName)
 
+def clearScreen():
+    os.system('clear' if sys.platform == 'linux' else 'cls')
+
 # START
 
 while True:
@@ -128,9 +131,11 @@ while True:
         chosenOption = 0
 
     if chosenOption == 1:
+        clearScreen()
         checkIfWatchedFolderExists()
         copyToTempFolder()
 
+        print('[ RENAME/COPY/MOVE ]')
         for fileName in searchFilesViaRegex(mainRegex, tempFolderWorkingDir):
             newFileName = destructureFileName(fileName, mainRegex)
 
@@ -140,7 +145,7 @@ while True:
             renameInto(fileName, newFileName, True)
             copyTo(newFileName, destinationFolder, True)
             moveIntoWatchedFolder(newFileName)
-            print('+----------------------------+')
+            print('\n+----------------------------+')
 
         print('\nRENAME/COPY/MOVE SCRIPT FINISHED!')
 
@@ -148,7 +153,10 @@ while True:
         inputIfLinux()
         sys.exit()
     elif chosenOption == 2:
+        clearScreen()
         copyToTempFolder()
+
+        print('[ RENAME/COPY ]')
         for fileName in searchFilesViaRegex(mainRegex, tempFolderWorkingDir):
             newFileName = destructureFileName(fileName, mainRegex)
 
@@ -157,7 +165,7 @@ while True:
 
             renameInto(fileName, newFileName, True)
             copyTo(newFileName, destinationFolder2, True)
-            print('+----------------------------+')
+            print('\n+----------------------------+')
 
         print('\nRENAME/COPY SCRIPT FINISHED!')
 
@@ -165,18 +173,24 @@ while True:
         inputIfLinux()
         sys.exit()
     elif chosenOption == 3:
+        clearScreen()
+
+        print('[ COPY ]')
         for fileName in searchFilesViaRegex(videoFileRegex, absWorkingDir):
             fileName = appendToWorkingDir(fileName)
 
             copyTo(fileName, destinationFolder2, True)
-            print('+----------------------------+')
+            print('\n+----------------------------+')
         
         print('\nCOPY SCRIPT FINISHED!')
 
         inputIfLinux()
         sys.exit()
     elif chosenOption == 4:
+        clearScreen()
         copyToTempFolder()
+
+        print('[ RENAME ]')
         for fileName in searchFilesViaRegex(mainRegex, tempFolderWorkingDir):
             newFileName = destructureFileName(fileName, mainRegex)
             
@@ -184,7 +198,7 @@ while True:
             newFileName = appendToWorkingDir(newFileName)
 
             renameInto(fileName, newFileName, True)
-            print('+----------------------------+')
+            print('\n+----------------------------+')
         
         print('\nRENAME SCRIPT FINISHED!')
 
@@ -192,7 +206,10 @@ while True:
         inputIfLinux()
         sys.exit()
     elif chosenOption == 5:
+        clearScreen()
+        
         count = 1
+        print('[ CURRENT FILES IN FOLDER: ]')
         for fileName in searchFilesViaRegex(videoFileRegex, absWorkingDir):
             print('\n{} : {}'.format(count, fileName))
             count += 1
