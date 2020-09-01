@@ -24,10 +24,10 @@ For example: "Podcast #3 - Title" Should be named "Podcast #03 - Title"
 
 (Executables made with pyinstaller)
 
-## Post Typer
+## Podcast Selector
 
-Used to type a post I created and submit it on reddit.
+Similar to the Retriever but designed to be automated easily with CRON.
 
-I created this because of social anxiety and to stop myself from typing posts and erasing them. Having the machine type the post and submit it removes myself from it and (hopefully) allows for me to better socialize on the internet.
+It works by picking a set amount of random supported files and copying them over to the destination. In my use case, a folder synced to my phone. It stores the last picked files so that it doesn't pick them again in another go of the program.
 
-The script should work with any website that has a: #1 Box that you can type in, and #2 a button that you click to submit, just provide an image of them called 'respBox' and 'saveBtn' into the folder.
+Arguments are supported, pass -h for a list.
