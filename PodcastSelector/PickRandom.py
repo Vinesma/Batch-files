@@ -11,7 +11,7 @@ def load_args():
     global working_dir
     global destination_dir
     global quantity
-    
+
     try:
         options, args = getopt.getopt(sys.argv[1:],'hn:i:d:')
     except getopt.GetoptError as err:
@@ -80,7 +80,7 @@ def save_data(picked_files):
 
 def load_data():
     if os.path.isfile(savefile):
-        print(f"Found {savefile}!")
+        print(f"Savedata found!")
         with open(savefile, 'r') as file:
             last_picked_files = json.load(file)
 
